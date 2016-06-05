@@ -7,6 +7,7 @@ import org.apache.hadoop.hbase.util.Bytes;
  */
 public class Constants {
 
+    public static final String CLICK_TABLE = "AppClickOrder";
     public static final byte[] COLUMN_FAMILY = Bytes.toBytes("click");
     public static final byte[] EVENT_ID = Bytes.toBytes("eventId");
     public static final byte[] UUID =Bytes.toBytes("uuid");

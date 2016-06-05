@@ -3,9 +3,9 @@ package com.jd.www.hbase;
 import com.jd.www.util.Constants;
 import com.jd.www.vo.ClickVo;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.ZooKeeperConnectionException;
+import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,13 @@ public class HbaseUtils {
         this.configuration.set("zookeeper.znode.parent", zkRoot);
     }
 
-    public synchronized HConnection gethConnection() throws ZooKeeperConnectionException {
+    public HbaseUtils() {
+        this.configuration = HBaseConfiguration.create();
+        this.configuration.set("hbase.zookeeper.quorum", "master.hadoop");
+        this.configuration.set("hbase.zookeeper.property.clientPort", "2181");
+    }
+
+    public synchronized HConnection gethConnection() throws IOException {
         if (hConnection == null) {
             hConnection = HConnectionManager.createConnection(configuration);
         }
@@ -52,7 +58,31 @@ public class HbaseUtils {
         return table;
     }
 
-    public boolean insertClick(String tableName, byte[] key, ClickVo clickVo, long ts)  {
+    public void createTable(String tableName, String[] columnFamilys) {
+        try {
+            HBaseAdmin admin = new HBaseAdmin(this.configuration);
+            if (admin.tableExists(tableName)) {
+                LOGGER.warn(tableName + " already exist！！");
+            } else {
+                HTableDescriptor desc = new HTableDescriptor(tableName);
+                for (String columnFamily : columnFamilys) {
+                    desc.addFamily(new HColumnDescriptor(columnFamily));
+                }
+                admin.createTable(desc);
+                LOGGER.info("create table " + tableName + " is success！");
+            }
+
+        } catch (MasterNotRunningException e) {
+            e.printStackTrace();
+        } catch (ZooKeeperConnectionException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean insertClick(String tableName, byte[] key, ClickVo clickVo, long ts) {
         HTable table = getTable(tableName);
         try {
             Put put = new Put(key);
@@ -75,11 +105,39 @@ public class HbaseUtils {
         }
     }
 
-    public ClickVo getClick(String tableName, byte[] key ) {
+    public ClickVo getClick(String tableName, byte[] key, String uuid ) throws IOException {
         HTable table = getTable(tableName);
-        ResultScanner result = null;
+        ResultScanner results = null;
         Scan scan = new Scan();
-
+        scan.setFilter(new PrefixFilter(key));
+        scan.addColumn(Constants.COLUMN_FAMILY, Constants.UUID);
+        scan.addColumn(Constants.COLUMN_FAMILY, Constants.EVENT_ID);
+        scan.addColumn(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM);
+        scan.addColumn(Constants.COLUMN_FAMILY, Constants.CLICK_TIME);
+        results = table.getScanner(scan);
+        for (Result result : results) {
+            String huuid = Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.UUID));
+            if (uuid.equals(huuid)) {
+                ClickVo click = new ClickVo(huuid
+                                                            ,Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.EVENT_ID))
+                                                            ,Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM))
+                                                            ,Bytes.toDouble(result.getValue(Constants.COLUMN_FAMILY, Constants.CLICK_TIME)));
+                return click;
+            }
+        }
+        table.close();
         return null;
+    }
+
+    public void dropTable(String tableName) throws IOException {
+        HBaseAdmin admin = new HBaseAdmin(configuration);
+        if (admin.tableExists(tableName)) {
+            admin.disableTable(tableName);
+            admin.deleteTable(tableName);
+            LOGGER.info(tableName ,"{} drop success!!");
+        }else {
+            LOGGER.warn(tableName, "{} not exists!!");
+        }
+        admin.close();
     }
 }

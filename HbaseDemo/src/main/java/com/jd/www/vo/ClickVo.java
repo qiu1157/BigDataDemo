@@ -11,9 +11,13 @@ public class ClickVo implements Serializable {
     private String eventParam;
     private Double clickTime;
 
-    public void toBytes() {
-
+    public ClickVo(String mbaMuid, String eventId, String eventParam, Double clickTime) {
+        this.mbaMuid = mbaMuid;
+        this.eventId = eventId;
+        this.eventParam = eventParam;
+        this.clickTime = clickTime;
     }
+
     public String getMbaMuid() {
         return mbaMuid;
     }
@@ -44,5 +48,15 @@ public class ClickVo implements Serializable {
 
     public void setClickTime(Double clickTime) {
         this.clickTime = clickTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ClickVo{" +
+                "mbaMuid='" + mbaMuid + '\'' +
+                ", eventId='" + eventId + '\'' +
+                ", eventParam='" + eventParam + '\'' +
+                ", clickTime=" + clickTime +
+                '}';
     }
 }
