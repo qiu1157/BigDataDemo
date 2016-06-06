@@ -16,7 +16,8 @@ public class HbaseTest {
       ClickVo clickVo = new ClickVo("00001", "HomeFloor", "abc", 10000d);
       hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.COLUMN_FAMILY, clickVo, System.currentTimeMillis() );
       */
-      ClickVo clickVo = hbaseUtils.getClick(Constants.CLICK_TABLE, Constants.COLUMN_FAMILY, "00001");
-      System.out.println(clickVo.toString());
+//      ClickVo clickVo = hbaseUtils.getClick(Constants.CLICK_TABLE, Constants.COLUMN_FAMILY, "00001");
+//      System.out.println(clickVo.toString());
+      hbaseUtils.dropTable(Constants.CLICK_TABLE);
    }
 }

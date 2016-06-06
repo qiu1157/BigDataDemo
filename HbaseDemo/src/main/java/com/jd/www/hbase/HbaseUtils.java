@@ -64,7 +64,7 @@ public class HbaseUtils {
             if (admin.tableExists(tableName)) {
                 LOGGER.warn(tableName + " already exist！！");
             } else {
-                HTableDescriptor desc = new HTableDescriptor(tableName);
+                HTableDescriptor desc = new HTableDescriptor(TableName.valueOf(tableName));
                 for (String columnFamily : columnFamilys) {
                     desc.addFamily(new HColumnDescriptor(columnFamily));
                 }
@@ -129,14 +129,19 @@ public class HbaseUtils {
         return null;
     }
 
+    /**
+     * 删除表
+     * @param tableName
+     * @throws IOException
+     */
     public void dropTable(String tableName) throws IOException {
         HBaseAdmin admin = new HBaseAdmin(configuration);
         if (admin.tableExists(tableName)) {
             admin.disableTable(tableName);
             admin.deleteTable(tableName);
-            LOGGER.info(tableName ,"{} drop success!!");
+            LOGGER.info("{} drop success!!", tableName );
         }else {
-            LOGGER.warn(tableName, "{} not exists!!");
+            LOGGER.warn("打印 {} not exists!!", tableName);
         }
         admin.close();
     }
