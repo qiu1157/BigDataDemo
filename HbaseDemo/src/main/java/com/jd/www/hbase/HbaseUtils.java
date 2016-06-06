@@ -86,11 +86,6 @@ public class HbaseUtils {
         HTable table = getTable(tableName);
         try {
             Put put = new Put(Bytes.toBytes(uuid));
-/*            put.add(Constants.COLUMN_FAMILY, Constants.EVENT_ID, Bytes.toBytes(clickVo.getEventId()));
-            put.add(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM, Bytes.toBytes(clickVo.getEventParam()));
-            put.add(Constants.COLUMN_FAMILY, Constants.UUID, Bytes.toBytes(clickVo.getMbaMuid()));
-            put.add(Constants.COLUMN_FAMILY, Constants.CLICK_TIME, Bytes.toBytes(clickVo.getClickTime()));
-*/
             put.add(Constants.COLUMN_FAMILY, columnName, Bytes.toBytes(String.format("%s###%s", eventId, eventParam)));
             put.add(Constants.COLUMN_FAMILY, Constants.CLICK_TIME, Bytes.toBytes(ts));
             table.put(put);
