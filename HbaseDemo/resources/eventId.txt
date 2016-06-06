@@ -1,0 +1,14 @@
+Home_Floor=1
+M618PreHeat_CharacteristicActivity=3
+M618PreHeat_Class=3
+M618PreHeat_CharacteristicHall=3
+M618PreHeat_PreProduct=4
+M618Special_CharacteristicActivity=3
+M618Special_MainHall=3
+M618Special_ClassHallBig=3
+M618Special_ClassHallSmall=3
+M618Special_SpecialHall=3
+M618Climax_CharacteristicActivity=3
+M618Climax_ClassTwoeHall=3
+M618Climax_ClassThreeHall=3
+M618Climax_CharacteristicHall=3

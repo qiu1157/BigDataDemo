@@ -62,16 +62,16 @@ public class HbaseUtils {
         try {
             HBaseAdmin admin = new HBaseAdmin(this.configuration);
             if (admin.tableExists(tableName)) {
-                LOGGER.warn(tableName + " already exist！！");
+                LOGGER.warn("{} already exist！！", tableName);
             } else {
-                HTableDescriptor desc = new HTableDescriptor(tableName);
+                HTableDescriptor desc = new HTableDescriptor(TableName.valueOf(tableName));
                 for (String columnFamily : columnFamilys) {
                     desc.addFamily(new HColumnDescriptor(columnFamily));
                 }
                 admin.createTable(desc);
-                LOGGER.info("create table " + tableName + " is success！");
+                LOGGER.info("create table {} is success！", tableName);
             }
-
+            admin.close();
         } catch (MasterNotRunningException e) {
             e.printStackTrace();
         } catch (ZooKeeperConnectionException e) {
@@ -82,18 +82,21 @@ public class HbaseUtils {
 
     }
 
-    public boolean insertClick(String tableName, byte[] key, ClickVo clickVo, long ts) {
+    public boolean insertClick(String tableName, byte[] columnName, String uuid, String eventId, String eventParam, long ts) {
         HTable table = getTable(tableName);
         try {
-            Put put = new Put(key);
-            put.add(Constants.COLUMN_FAMILY, Constants.EVENT_ID, Bytes.toBytes(clickVo.getEventId()));
+            Put put = new Put(Bytes.toBytes(uuid));
+/*            put.add(Constants.COLUMN_FAMILY, Constants.EVENT_ID, Bytes.toBytes(clickVo.getEventId()));
             put.add(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM, Bytes.toBytes(clickVo.getEventParam()));
             put.add(Constants.COLUMN_FAMILY, Constants.UUID, Bytes.toBytes(clickVo.getMbaMuid()));
             put.add(Constants.COLUMN_FAMILY, Constants.CLICK_TIME, Bytes.toBytes(clickVo.getClickTime()));
+*/
+            put.add(Constants.COLUMN_FAMILY, columnName, Bytes.toBytes(String.format("%s###%s", eventId, eventParam)));
+            put.add(Constants.COLUMN_FAMILY, Constants.CLICK_TIME, Bytes.toBytes(ts));
             table.put(put);
             return true;
         } catch (IOException e) {
-            LOGGER.error("insert "+ Constants.COLUMN_FAMILY + " failed!");
+            LOGGER.error("insert " + Constants.COLUMN_FAMILY + " failed!");
             e.printStackTrace();
             return false;
         } finally {
@@ -105,24 +108,18 @@ public class HbaseUtils {
         }
     }
 
-    public ClickVo getClick(String tableName, byte[] key, String uuid ) throws IOException {
+    public ClickVo getClick(String tableName, byte[] key, String uuid) throws IOException {
         HTable table = getTable(tableName);
         ResultScanner results = null;
         Scan scan = new Scan();
         scan.setFilter(new PrefixFilter(key));
         scan.addColumn(Constants.COLUMN_FAMILY, Constants.UUID);
-        scan.addColumn(Constants.COLUMN_FAMILY, Constants.EVENT_ID);
-        scan.addColumn(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM);
         scan.addColumn(Constants.COLUMN_FAMILY, Constants.CLICK_TIME);
         results = table.getScanner(scan);
         for (Result result : results) {
             String huuid = Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.UUID));
             if (uuid.equals(huuid)) {
-                ClickVo click = new ClickVo(huuid
-                                                            ,Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.EVENT_ID))
-                                                            ,Bytes.toString(result.getValue(Constants.COLUMN_FAMILY, Constants.EVENT_PARAM))
-                                                            ,Bytes.toDouble(result.getValue(Constants.COLUMN_FAMILY, Constants.CLICK_TIME)));
-                return click;
+
             }
         }
         table.close();
@@ -134,9 +131,9 @@ public class HbaseUtils {
         if (admin.tableExists(tableName)) {
             admin.disableTable(tableName);
             admin.deleteTable(tableName);
-            LOGGER.info(tableName ,"{} drop success!!");
-        }else {
-            LOGGER.warn(tableName, "{} not exists!!");
+            LOGGER.info("{} drop success!!", tableName);
+        } else {
+            LOGGER.warn( "{} not exists!!", tableName);
         }
         admin.close();
     }

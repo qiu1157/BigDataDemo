@@ -19,7 +19,7 @@
     <orderEntry type="module-library">
       <library name="Maven: jdk.tools:jdk.tools:1.6">
         <CLASSES>
-          <root url="jar://E:/JAVA/jdk1.6.0_07/jre/../lib/tools.jar!/" />
+          <root url="jar://C:/Program Files (x86)/Java/jdk1.7.0_79/lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -57,8 +57,7 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
     <orderEntry type="library" name="Maven: commons-configuration:commons-configuration:1.6" level="project" />
     <orderEntry type="library" name="Maven: commons-digester:commons-digester:1.8" level="project" />
-    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.7.0" level="project" />
-    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils-core:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" level="project" />
     <orderEntry type="library" name="Maven: org.apache.avro:avro:1.7.4" level="project" />

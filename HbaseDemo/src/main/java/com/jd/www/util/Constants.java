@@ -8,9 +8,10 @@ import org.apache.hadoop.hbase.util.Bytes;
 public class Constants {
 
     public static final String CLICK_TABLE = "AppClickOrder";
-    public static final byte[] COLUMN_FAMILY = Bytes.toBytes("click");
-    public static final byte[] EVENT_ID = Bytes.toBytes("eventId");
-    public static final byte[] UUID =Bytes.toBytes("uuid");
-    public static final byte[] EVENT_PARAM = Bytes.toBytes("eventParam");
-    public static final byte[] CLICK_TIME = Bytes.toBytes("clickTime");
+    public static final byte[] COLUMN_FAMILY = Bytes.toBytes("ck");
+    public static final byte[] UUID =Bytes.toBytes("uid");
+    public static final byte[] CLICK_TIME = Bytes.toBytes("ctm");
+    public static final byte[] LV1_EVENT = Bytes.toBytes("lv1");
+    public static final byte[] LV3_EVENT = Bytes.toBytes("lv3");
+    public static final byte[] LV4_EVENT = Bytes.toBytes("lv4");
 }
