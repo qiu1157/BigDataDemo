@@ -11,13 +11,18 @@ import java.io.IOException;
 public class HbaseTest {
     public static void main(String[] args) throws IOException {
         HbaseUtils hbaseUtils = new HbaseUtils();
-//      hbaseUtils.dropTable(Constants.CLICK_TABLE);
-//      hbaseUtils.createTable(Constants.CLICK_TABLE, new String[]{"ck"});
-        hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.LV1_EVENT, "1462892973549-046010ecd58c13dc27", "Home_Floor", "abcd", System.currentTimeMillis());
-//      hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.LV1_EVENT, "1425724352971-db7415d8fd31fef31d","Home_Floor", "abc_dsa#1", System.currentTimeMillis());
-//      ClickVo cklickVo = new ClickVo("00001", "HomeFloor", "abc", 10000d);
-//      hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.COLUMN_FAMILY, clickVo, System.currentTimeMillis());
-//      ClickVo clickVo = hbaseUtils.getClick(Constants.CLICK_TABLE, Constants.COLUMN_FAMILY, "00001");
+        String uuid = "1425724352971-db7415d8fd31fef31d1";
+//        hbaseUtils.dropTable(Constants.CLICK_TABLE);
+//        hbaseUtils.createTable(Constants.CLICK_TABLE, new String[]{"ck", "ac", "ord"});
+        hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.LV1_EVENT, uuid, "Home_Floor", "576_0_CMSSH105677_1465274295__0_1___", 1465274651.638000d);
+        hbaseUtils.setHColumnDescriptor(Constants.CLICK_TABLE, Constants.COLUMN_CK_FAMILY);
+//        hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.LV3_EVENT, uuid, "M618Special_ClassHallSmall", "//sale.jd.com/m/act/4VRdmG362EbLpIx.html_00002718_00020840_2_2_1#5ac6076e13b04fb27ca43ff9dda6bd2603b22eab#8434", 1465274589.286d);
+
 //      System.out.println(clickVo.toString());
+//        ClickVo clickVo = hbaseUtils.getClick(Constants.CLICK_TABLE, uuid);
+//        if (clickVo != null) {
+//            System.out.println(clickVo.toString());
+//        }
+//        hbaseUtils.deleteOneRow(Constants.CLICK_TABLE, uuid);
     }
 }
