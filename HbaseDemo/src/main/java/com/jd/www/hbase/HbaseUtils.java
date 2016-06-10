@@ -68,7 +68,7 @@ public class HbaseUtils {
                 for (String columnFamily : columnFamilys) {
                     HColumnDescriptor hColumnDescriptor = new HColumnDescriptor(columnFamily);
                     hColumnDescriptor.setTimeToLive(2 * 24 * 60 * 60);
-                    desc.addFamily(hColumnDescriptor );
+                    desc.addFamily(hColumnDescriptor);
                 }
                 admin.createTable(desc);
                 LOGGER.info("create table {} is success!!", tableName);
@@ -186,13 +186,25 @@ public class HbaseUtils {
         }
     }
 
-    public void insertOrder(String tableName, String key, String skuId, String orderId, String reportTime, Long fee) {
+    /**
+     * 插入订单数据
+     *
+     * @param tableName
+     * @param key       uuid###yyyyMMdd
+     * @param skuId     skuId1###skuId2###......###skuIdN
+     * @param orderId
+     * @param fee
+     */
+    public void insertOrder(String tableName, String key, String skuId, String orderId, long fee) {
         HTable table = getTable(tableName);
+        //Set<String> set = new HashSet<String>(Arrays.asList(getSkuId(tableName, key, orderId, fee).split("###")));
+        String oldSkuId = getSkuId(tableName, key, orderId, fee);
+        if (oldSkuId != null) {
+            skuId = String.format("%s###%s", oldSkuId, skuId);
+        }
         Put put = new Put(Bytes.toBytes(key));
-        put.add(Constants.COLUMN_ORD_FAMILY, Constants.ORDER_ID, Bytes.toBytes(orderId));
-        put.add(Constants.COLUMN_ORD_FAMILY, Constants.SKUID, Bytes.toBytes(String.format("%s", skuId)));
-        put.add(Constants.COLUMN_ORD_FAMILY, Constants.REPORT_TIME, Bytes.toBytes(reportTime));
-        put.add(Constants.COLUMN_ORD_FAMILY, Constants.ORDER_FEE, Bytes.toBytes(fee));
+        byte[] column = Bytes.toBytes(String.format("%s###%d", orderId, fee));
+        put.add(Constants.COLUMN_ORD_FAMILY, column, Bytes.toBytes(skuId));
         try {
             table.put(put);
         } catch (Exception e) {
@@ -205,6 +217,35 @@ public class HbaseUtils {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public String getSkuId(String tableName, String key, String orderId, long fee) {
+        HTable table = getTable(tableName);
+        Get get = new Get(Bytes.toBytes(key));
+        get.addFamily(Constants.COLUMN_ORD_FAMILY);
+        Result result = null;
+        byte[] column = Bytes.toBytes(String.format("%s###%d", orderId, fee));
+        try {
+            if (table.exists(get)) {
+                result = table.get(get);
+                for (Cell cell : result.rawCells()) {
+                    if (Arrays.equals(CellUtil.cloneQualifier(cell), column)) {
+                        LOGGER.info("get skuIds == {}", new String(CellUtil.cloneValue(cell)));
+                        return new String(CellUtil.cloneValue(cell));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                table.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public void setHColumnDescriptor(String tableName, byte[] columnFamily) throws IOException {
