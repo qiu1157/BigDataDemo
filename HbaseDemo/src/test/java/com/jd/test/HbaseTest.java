@@ -1,7 +1,6 @@
 package com.jd.test;
 
 import com.jd.www.hbase.HbaseUtils;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
 
@@ -14,9 +13,7 @@ public class HbaseTest {
         String uuid = "1425724352971-db7415d8fd31fef31d1";
         String date = "20160523 12:27:31".substring(0, 8).trim();
         String key = String.format("%s#%s", uuid, date);
-        for(byte b : Bytes.toBytes(key)) {
-            System.out.print(b);
-        }
+        hbaseUtils.deleteAll("20160523");
 //        hbaseUtils.dropTable(Constants.CLICK_TABLE);
 //        hbaseUtils.createTable(Constants.CLICK_TABLE, new String[]{"ck", "ac", "ord"});
 //        hbaseUtils.insertClick(Constants.CLICK_TABLE, Constants.LV1_EVENT, key, "Home_Floor", "576_0_CMSSH105677_1465274295__0_1___", 1465274651.638000d);

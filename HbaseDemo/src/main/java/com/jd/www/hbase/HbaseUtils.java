@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by qiuxiangu on 2016/6/3.
@@ -255,5 +255,51 @@ public class HbaseUtils {
         HColumnDescriptor hColumnDescriptor = desc.getFamily(columnFamily);
         hColumnDescriptor.setTimeToLive(5);
         admin.modifyColumn(tableName, hColumnDescriptor);
+    }
+
+    public void deleteAll(String date) {
+        HTable table = getTable(Constants.CLICK_TABLE);
+        Scan scan = new Scan();
+        scan.addFamily(Constants.COLUMN_CK_FAMILY);
+        Set<byte[]> ret = new HashSet<byte[]>();
+        try {
+            ResultScanner results = table.getScanner(scan);
+            for (Result result : results) {
+                for (KeyValue keyValue : result.list()) {
+                    if (keyValue.getKeyString().indexOf(String.format("#%s", date)) != -1 ) {
+                        ret.add(result.getRow());
+                    }
+                }
+                if (ret.size() > 999) {
+                    LOGGER.info("delete 1000 record");
+                    deleteSetRow(ret);
+                    ret.clear();
+                }
+            }
+            if (ret.size() > 0){
+                LOGGER.info("delete record");
+                deleteSetRow(ret);
+                ret.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean deleteSetRow(Set<byte[]> set) {
+        HTable table = getTable(Constants.CLICK_TABLE);
+        List<Delete> list = new ArrayList<Delete>();
+        for(byte[] row : set) {
+            Delete del = new Delete(row);
+            list.add(del);
+        }
+        try {
+            table.delete(list);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
