@@ -248,6 +248,12 @@ public class HbaseUtils {
         return null;
     }
 
+    /**
+     * 修改列簇属性
+     * @param tableName
+     * @param columnFamily
+     * @throws IOException
+     */
     public void setHColumnDescriptor(String tableName, byte[] columnFamily) throws IOException {
         HBaseAdmin admin = new HBaseAdmin(this.configuration);
         HTable table = getTable(tableName);
@@ -287,6 +293,11 @@ public class HbaseUtils {
 
     }
 
+    /**
+     * 删除set中的记录
+     * @param set
+     * @return
+     */
     public boolean deleteSetRow(Set<byte[]> set) {
         HTable table = getTable(Constants.CLICK_TABLE);
         List<Delete> list = new ArrayList<Delete>();
