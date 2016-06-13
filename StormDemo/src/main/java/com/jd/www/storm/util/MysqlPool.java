@@ -9,8 +9,8 @@ import java.util.Vector;
 /**
  * Created by qiuxiangu on 2016/6/13.
  */
-public class MysqlUtil {
-    private static final Logger logger = LoggerFactory.getLogger(MysqlUtil.class);
+public class MysqlPool {
+    private static final Logger logger = LoggerFactory.getLogger(MysqlPool.class);
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://master.hadoop:3306/bigdata?characterEncoding=utf8";
     private static final String DB_USER = "bd";
@@ -20,7 +20,7 @@ public class MysqlUtil {
     private static final int INCR_NUM = 1;
     private Vector<PooledConnection> connections = null; //存放连接池中的连接
 
-    public MysqlUtil() {
+    public MysqlPool() {
 
     }
 
