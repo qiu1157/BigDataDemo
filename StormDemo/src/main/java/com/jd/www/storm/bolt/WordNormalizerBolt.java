@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by qiuxiangu on 2016/6/12.
  */
-public class WordNormalizerBolt implements IRichBolt{
+public class WordNormalizerBolt implements IRichBolt {
     private OutputCollector outputCollector;
 
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
@@ -24,8 +24,11 @@ public class WordNormalizerBolt implements IRichBolt{
         String sentence = tuple.getStringByField("word");
         String[] words = sentence.split(" ");
         for (String word : words) {
-            outputCollector.emit(new Values(word));
+            if (!"".equals(word.trim())) {
+                outputCollector.emit(new Values(word));
+            }
         }
+        outputCollector.ack(tuple);
     }
 
     public void cleanup() {
