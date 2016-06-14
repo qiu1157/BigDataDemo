@@ -8,5 +8,5 @@ public class RedisUtil {
     private static int length = 3000;
     private static RedisUtil redisUtil = new RedisUtil();
 
-    private final static List<Cluster>
+
 }

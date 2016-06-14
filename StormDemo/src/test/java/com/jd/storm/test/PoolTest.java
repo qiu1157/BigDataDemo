@@ -12,11 +12,12 @@ import java.sql.SQLException;
  */
 public class PoolTest {
     public static void main(String[] args) {
+        Connection conn = null;
         MysqlPool pool = new MysqlPool();
         try {
             pool.createPool();
             String sql = "select * from bigdata.test";
-            Connection conn = pool.getConnection();
+            conn = pool.getConnection();
             PreparedStatement ps;
             ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -31,7 +32,8 @@ public class PoolTest {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            pool.returnConnection(conn);
         }
-
     }
 }

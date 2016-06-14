@@ -20,6 +20,7 @@ public class RandomSentSpout extends BaseRichSpout {
 
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         this.outputCollector = spoutOutputCollector;
+        random = new Random();
     }
 
     public void nextTuple() {
