@@ -17,6 +17,7 @@ import java.util.Set;
 public class EventConfig {
     private static Map<String, String> map = new HashMap<String, String>();
     private final static Logger logger = LoggerFactory.getLogger(EventConfig.class);
+
     static {
         InputStream is = EventConfig.class.getClassLoader().getResourceAsStream("eventId.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -26,7 +27,7 @@ public class EventConfig {
                 map.put(str.split("=")[0], str.split("=")[1]);
             }
         } catch (IOException e) {
-            logger.error("EventConfig read config failed!={}" ,e.getMessage());
+            logger.error("EventConfig read config failed!={}", e.getMessage());
             e.printStackTrace();
         } finally {
             if (br != null) {

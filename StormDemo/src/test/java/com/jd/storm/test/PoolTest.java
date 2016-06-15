@@ -21,7 +21,7 @@ public class PoolTest {
             PreparedStatement ps;
             ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 System.out.println(rs.getString("uname"));
             }
         } catch (ClassNotFoundException e) {
@@ -32,7 +32,7 @@ public class PoolTest {
             e.printStackTrace();
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             pool.returnConnection(conn);
         }
     }

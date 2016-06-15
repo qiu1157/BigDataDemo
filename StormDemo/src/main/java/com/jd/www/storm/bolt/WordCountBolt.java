@@ -31,7 +31,7 @@ public class WordCountBolt implements IRichBolt {
 
     public void execute(Tuple tuple) {
         if (isTickTuple(tuple)) {
-            if (counters.size() > 0) {
+            if (!counters.isEmpty()) {
                 MysqlOper.insert(counters);
             }
         } else {

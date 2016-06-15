@@ -250,6 +250,7 @@ public class HbaseUtils {
 
     /**
      * 修改列簇属性
+     *
      * @param tableName
      * @param columnFamily
      * @throws IOException
@@ -272,7 +273,7 @@ public class HbaseUtils {
             ResultScanner results = table.getScanner(scan);
             for (Result result : results) {
                 for (KeyValue keyValue : result.list()) {
-                    if (keyValue.getKeyString().indexOf(String.format("#%s", date)) != -1 ) {
+                    if (keyValue.getKeyString().indexOf(String.format("#%s", date)) != -1) {
                         ret.add(result.getRow());
                     }
                 }
@@ -282,7 +283,7 @@ public class HbaseUtils {
                     ret.clear();
                 }
             }
-            if (ret.size() > 0){
+            if (ret.size() > 0) {
                 LOGGER.info("delete record");
                 deleteSetRow(ret);
                 ret.clear();
@@ -295,13 +296,14 @@ public class HbaseUtils {
 
     /**
      * 删除set中的记录
+     *
      * @param set
      * @return
      */
     public boolean deleteSetRow(Set<byte[]> set) {
         HTable table = getTable(Constants.CLICK_TABLE);
         List<Delete> list = new ArrayList<Delete>();
-        for(byte[] row : set) {
+        for (byte[] row : set) {
             Delete del = new Delete(row);
             list.add(del);
         }

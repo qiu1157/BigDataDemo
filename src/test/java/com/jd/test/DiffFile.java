@@ -35,7 +35,7 @@ public class DiffFile {
         return null;
     }
 
-    public void readFileLine(String path, String line)  {
+    public void readFileLine(String path, String line) {
         boolean b = false;
         BufferedReader br = null;
         try {

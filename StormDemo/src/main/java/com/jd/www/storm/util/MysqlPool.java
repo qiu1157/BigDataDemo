@@ -179,7 +179,7 @@ public class MysqlPool {
      * 关闭连接池
      */
     public void closeConnectionPool() {
-        if(this.connections == null) {
+        if (this.connections == null) {
             return;
         }
         for (int i = 0; i < connections.size(); i++) {

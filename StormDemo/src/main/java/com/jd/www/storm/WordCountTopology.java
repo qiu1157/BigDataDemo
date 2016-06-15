@@ -17,6 +17,7 @@ import org.apache.storm.tuple.Fields;
  */
 public class WordCountTopology {
     private static TopologyBuilder builder = new TopologyBuilder();
+
     public static void main(String[] args) throws InvalidTopologyException, AuthorizationException, AlreadyAliveException {
         Config config = new Config();
 
@@ -25,7 +26,7 @@ public class WordCountTopology {
         builder.setBolt("WordCount", new WordCountBolt(30), 2).fieldsGrouping("WordNormallizer", new Fields("word"));
         config.setDebug(false);
 
-        if(args !=null && args.length > 0 ){
+        if (args != null && args.length > 0) {
             config.setNumWorkers(1);
             StormSubmitter.submitTopology("WordCount", config, builder.createTopology());
         } else {

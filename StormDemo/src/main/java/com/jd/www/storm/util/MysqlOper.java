@@ -14,26 +14,27 @@ import java.util.Map;
 public class MysqlOper {
     private static final Logger LOGGER = LoggerFactory.getLogger(MysqlOper.class);
 
-    public static void insert(Map<String, Integer> map)  {
+    public static void insert(Map<String, Integer> map) {
         String sql = "insert into bigdata.storm_word_count(keyword,cnt) values";
         StringBuffer dealSql = new StringBuffer();
         Connection conn = null;
         PreparedStatement ps = null;
         dealSql.append(sql);
-        for(Map.Entry<String, Integer> entry : map.entrySet()) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
             dealSql.append("('");
             dealSql.append(entry.getKey());
             dealSql.append("',");
             dealSql.append(entry.getValue());
-            dealSql.append(")");
+            dealSql.append("),");
         }
+        dealSql.deleteCharAt(dealSql.length() - 1);
         dealSql.append(";");
         LOGGER.info("dealSql:{}", dealSql);
         MysqlPool pool = new MysqlPool();
         try {
             pool.createPool();
             conn = pool.getConnection();
-            ps  = conn.prepareStatement(dealSql.toString());
+            ps = conn.prepareStatement(dealSql.toString());
             ps.executeUpdate();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
