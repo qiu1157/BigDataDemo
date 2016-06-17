@@ -21,9 +21,12 @@ public class ModuleGrouping implements CustomStreamGrouping {
         List<Integer> boltIds = new ArrayList<Integer>();
         if (list.size() > 0){
             String str = list.get(0).toString();
-            if (str.isEmpty())
+            if (str.length() == 0) {
                 boltIds.add(0);
-            else
+            }else {
+                boltIds.add(str.charAt(0) % numTasks);
+            }
         }
+        return  boltIds;
     }
 }
