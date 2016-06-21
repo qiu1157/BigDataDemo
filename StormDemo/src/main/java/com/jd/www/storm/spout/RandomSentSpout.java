@@ -17,10 +17,12 @@ import java.util.Random;
 public class RandomSentSpout extends BaseRichSpout {
     SpoutOutputCollector outputCollector;
     Random random;
+    private int flag ;
 
     public void open(Map map, TopologyContext topologyContext, SpoutOutputCollector spoutOutputCollector) {
         this.outputCollector = spoutOutputCollector;
         random = new Random();
+        flag = 0;
     }
 
     public void nextTuple() {
@@ -45,8 +47,14 @@ public class RandomSentSpout extends BaseRichSpout {
                 "at backtype storm utils ShellProcess",
                 "Of those who were older than we"
         };
-        String sentence = sentences[random.nextInt(sentences.length)];
-        outputCollector.emit(new Values(sentence.trim().toLowerCase()));
+        if (flag < 1) {
+            for(String str : sentences) {
+                outputCollector.emit(new Values(str));
+            }
+            flag++;
+        }
+
+//        outputCollector.emit(new Values(sentence.trim().toLowerCase()));
     }
 
     public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {

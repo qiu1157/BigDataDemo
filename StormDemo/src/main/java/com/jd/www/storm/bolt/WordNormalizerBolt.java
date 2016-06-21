@@ -7,7 +7,8 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public class WordNormalizerBolt implements IRichBolt {
     private OutputCollector outputCollector;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(WordNormalizerBolt.class);
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
         this.outputCollector = outputCollector;
     }
@@ -24,8 +25,15 @@ public class WordNormalizerBolt implements IRichBolt {
         String sentence = tuple.getStringByField("word");
         String[] words = sentence.split(" ");
         for (String word : words) {
-            if (!"".equals(word.trim())) {
-                outputCollector.emit(new Values(word));
+            if (!word.isEmpty()) {
+                if ("out".equals(word)) {
+                    try {
+                        throw new Exception("out exception");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                outputCollector.emit(tuple, new Values(word));
             }
         }
         outputCollector.ack(tuple);

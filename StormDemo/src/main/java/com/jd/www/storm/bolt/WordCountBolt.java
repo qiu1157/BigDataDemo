@@ -9,6 +9,8 @@ import org.apache.storm.topology.IRichBolt;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +22,9 @@ public class WordCountBolt implements IRichBolt {
     private OutputCollector outputCollector;
     private Map<String, Integer> counters;
     private int topologyTickTupleFreqSecs;
+    private Integer taskId;
+    private String taskName;
+    private static final Logger LOGGER = LoggerFactory.getLogger(WordCountBolt.class);
 
     public WordCountBolt(int topologyTickTupleFreqSecs) {
         this.topologyTickTupleFreqSecs = topologyTickTupleFreqSecs;
@@ -28,10 +33,13 @@ public class WordCountBolt implements IRichBolt {
     public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {
         this.outputCollector = outputCollector;
         counters = new HashMap<String, Integer>();
+        taskId = topologyContext.getThisTaskId();
+        taskName = topologyContext.getThisComponentId();
     }
 
     public void execute(Tuple tuple) {
         if (isTickTuple(tuple)) {
+            LOGGER.info("---Word Count[{}-{}]--", taskName, taskId);
             if (!counters.isEmpty()) {
                 MysqlOper.insert(counters);
             }
@@ -39,7 +47,9 @@ public class WordCountBolt implements IRichBolt {
             String word = tuple.getString(0);
             Integer count = counters.get(word) == null ? 1 : counters.get(word) + 1;
             counters.put(word, count);
+            outputCollector.ack(tuple);
         }
+
     }
 
     public void cleanup() {
