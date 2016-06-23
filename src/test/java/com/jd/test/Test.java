@@ -7,11 +7,9 @@ package com.jd.test;
  */
 public class Test {
     public static void main(String[] args) throws InterruptedException {
-        String a = "aaa";
-        if (a.isEmpty()) {
-            System.out.println("empty");
-        }else {
-            System.out.println("full");
+        byte[] bytes = "foobar".getBytes();
+        for(byte b : bytes) {
+            System.out.println(Integer.toBinaryString(b));
         }
     }
 }

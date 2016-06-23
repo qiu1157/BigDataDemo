@@ -20,7 +20,7 @@ public class RedisUtil {
         public void set(String key, String value) {
             jedis.set(key, value);
         }*/
-    private static final String REDIS_HOST = "172.27.23.4";
+    private static final String REDIS_HOST = "Master.Hadoop";
     private static final int REDIS_PORT = 6379;
     private static int MaxActive = 3000;
     private static int MaxIdle = 1000;
