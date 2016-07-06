@@ -8,6 +8,13 @@ import java.util.List;
  * Created by qiuxiangu on 2016/6/23.
  */
 public class RedisOperTest {
+    RedisOper oper = new RedisOper();
+
+    @Test
+    public void rpoplpush() throws Exception {
+            oper.rpoplpush("mylist", "myoterlist");
+    }
+
     @Test
     public void rpush() throws Exception {
 
@@ -18,7 +25,7 @@ public class RedisOperTest {
 
     }
 
-    RedisOper oper = new RedisOper();
+
     @Test
     public void set() throws Exception {
 

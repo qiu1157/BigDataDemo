@@ -45,7 +45,7 @@ public class RedisUtil {
 
     public static void returnResource(Jedis jedis) {
         if (jedis != null) {
-            pool.returnResource(jedis);
+            jedis.close();
         }
     }
 

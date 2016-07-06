@@ -85,4 +85,13 @@ public class RedisOper {
             returnResource(jedis);
         }
     }
+
+    public void rpoplpush(String srcKey, String descKey) {
+        try {
+            jedis.rpoplpush(srcKey, descKey);
+        } finally {
+            returnResource(jedis);
+        }
+    }
+
 }
