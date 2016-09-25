@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 public class WordCount {
     public static Logger logger = LoggerFactory.getLogger(WordCount.class);
+
     public static class MyMapper extends Mapper<Object, Text, Text, IntWritable> {
 
         @Override

@@ -110,4 +110,10 @@ public class RedisUtil {
         boolean b = client.exists(key);
         logger.info("result:{}",b);
     }
+
+    public void pfadd(String key, HashSet<String> set) {
+        for (String uuid : set) {
+            client.pfAdd(key, uuid);
+        }
+    }
 }

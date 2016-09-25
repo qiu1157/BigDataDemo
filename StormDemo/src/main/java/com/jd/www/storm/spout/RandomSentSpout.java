@@ -47,12 +47,12 @@ public class RandomSentSpout extends BaseRichSpout {
                 "at backtype storm utils ShellProcess",
                 "Of those who were older than we"
         };
-        if (flag < 1) {
+//        if (flag < 1) {
             for(String str : sentences) {
                 outputCollector.emit(new Values(str));
             }
-            flag++;
-        }
+//            flag++;
+//        }
 
 //        outputCollector.emit(new Values(sentence.trim().toLowerCase()));
     }

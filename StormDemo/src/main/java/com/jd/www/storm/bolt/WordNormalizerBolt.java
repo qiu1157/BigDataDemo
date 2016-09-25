@@ -26,13 +26,13 @@ public class WordNormalizerBolt implements IRichBolt {
         String[] words = sentence.split(" ");
         for (String word : words) {
             if (!word.isEmpty()) {
-                if ("out".equals(word)) {
+//                if ("out".equals(word)) {
                     try {
                         throw new Exception("out exception");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }
+//                }
                 outputCollector.emit(tuple, new Values(word));
             }
         }
