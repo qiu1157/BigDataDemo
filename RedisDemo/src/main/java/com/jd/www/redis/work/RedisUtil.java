@@ -30,7 +30,8 @@ public class RedisUtil {
             synchronized (JimClientFactory.class) {
                 if (client == null) {
                     clientFactory = new ReloadableJimClientFactory();
-                    clientFactory.setJimUrl("jim://2789323535165389595/1809");
+                    clientFactory.setJimUrl("jim://2774395604206436795/2057");
+//                    clientFactory.setJimUrl("jim://2789323535165389595/1809");
 //                    clientFactory.setJimUrl("jim://2801425694298350571/1590");
                     client = clientFactory.getClient();
                 }
