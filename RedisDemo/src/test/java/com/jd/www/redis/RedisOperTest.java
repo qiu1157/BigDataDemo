@@ -10,6 +10,11 @@ import java.util.Map;
  * Created by qiuxiangu on 2016/6/23.
  */
 public class RedisOperTest {
+    @Test
+    public void sadd() throws Exception {
+        oper.sadd("myset", "test");
+    }
+
     RedisOper oper = new RedisOper();
     @Test
     public void getSortSet() throws Exception {

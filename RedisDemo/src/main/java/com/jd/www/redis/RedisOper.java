@@ -143,4 +143,8 @@ public class RedisOper {
         }
         return list;
     }
+
+    public void sadd(String key, String str) {
+        jedis.sadd(key, str);
+    }
 }
