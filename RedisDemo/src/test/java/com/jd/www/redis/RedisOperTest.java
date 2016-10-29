@@ -12,7 +12,7 @@ import java.util.Map;
 public class RedisOperTest {
     @Test
     public void sadd() throws Exception {
-        oper.sadd("myset", "test");
+        oper.sadd("myset");
     }
 
     RedisOper oper = new RedisOper();

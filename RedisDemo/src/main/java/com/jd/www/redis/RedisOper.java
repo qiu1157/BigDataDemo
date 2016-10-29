@@ -144,7 +144,10 @@ public class RedisOper {
         return list;
     }
 
-    public void sadd(String key, String str) {
-        jedis.sadd(key, str);
+    public void sadd(String key) {
+        Set<String> set = new HashSet<String>();
+        set.add("a");
+        set.add("b");
+        jedis.sadd(key, set.toArray(new String[0]));
     }
 }
