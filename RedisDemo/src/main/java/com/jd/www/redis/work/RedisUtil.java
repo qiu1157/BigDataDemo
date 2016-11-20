@@ -17,6 +17,8 @@ import java.util.*;
  * Created by qiuxiangu on 2016/8/17.
  */
 public class RedisUtil {
+
+
     public Cluster client;
     private static ReloadableJimClientFactory clientFactory;
     private static Logger logger = LoggerFactory.getLogger(RedisUtil.class);
@@ -30,15 +32,16 @@ public class RedisUtil {
             synchronized (JimClientFactory.class) {
                 if (client == null) {
                     clientFactory = new ReloadableJimClientFactory();
-                    clientFactory.setJimUrl("jim://2774395604206436795/2057");
-//                    clientFactory.setJimUrl("jim://2789323535165389595/1809");
-//                    clientFactory.setJimUrl("jim://2801425694298350571/1590");
+                    clientFactory.setJimUrl("jim://2789323535165389595/1809");
                     client = clientFactory.getClient();
                 }
             }
         }
     }
 
+    public Cluster getClient() {
+        return client;
+    }
     public boolean insertSortSet(String key, String keyWord, int inc) {
         if (key == null || keyWord == null) {
             logger.error("Invaild Input");

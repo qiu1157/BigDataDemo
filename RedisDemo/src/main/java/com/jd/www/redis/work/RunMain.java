@@ -1,7 +1,8 @@
 package com.jd.www.redis.work;
 
+import com.jd.jim.cli.Cluster;
+
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by qiuxiangu on 2016/8/18.
@@ -9,7 +10,8 @@ import java.util.List;
 public class RunMain {
     public static void main(String[] args) throws IOException {
         RedisUtil redisUtil = new RedisUtil();
-        if ("update".equals(args[0])) {
+        Cluster client = redisUtil.getClient();
+/*        if ("update".equals(args[0])) {
             System.out.println("load 数据到redis");
             redisUtil.hmset("/home/recsys/qiuxg/keyword/app.txt");
         } else if ("scan".equals(args[0])) {
@@ -28,6 +30,6 @@ public class RunMain {
             }
         } else if ("exists".equals(args[0])) {
             redisUtil.exists(args[1]);
-        }
+        }*/
     }
 }

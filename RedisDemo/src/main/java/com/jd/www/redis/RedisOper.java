@@ -150,4 +150,9 @@ public class RedisOper {
         set.add("b");
         jedis.sadd(key, set.toArray(new String[0]));
     }
+
+    public void sget(String key) {
+        Set<String> set = jedis.zrangeByScore(key, 0, Double.MAX_VALUE, 0, 2) ;
+        System.out.println(set.toString());
+    }
 }

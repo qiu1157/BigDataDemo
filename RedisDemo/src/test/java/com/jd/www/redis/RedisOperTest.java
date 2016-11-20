@@ -11,6 +11,11 @@ import java.util.Map;
  */
 public class RedisOperTest {
     @Test
+    public void sget() throws Exception {
+        oper.sget("myzset");
+    }
+
+    @Test
     public void sadd() throws Exception {
         oper.sadd("myset");
     }
