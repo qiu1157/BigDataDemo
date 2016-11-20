@@ -1,5 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -8,7 +8,7 @@ import java.util.concurrent.CountDownLatch;
 public class CountDownLatchDemo implements Runnable {
     private CountDownLatch latch;
     private String ThreadName;
-
+    static Map<String, String> map = new ConcurrentHashMap();
     public CountDownLatchDemo(CountDownLatch latch, String threadName) {
         this.latch = latch;
         ThreadName = threadName;
@@ -33,6 +33,7 @@ public class CountDownLatchDemo implements Runnable {
     public void run() {
         for (int i = 0; i < 9; i++) {
             System.out.println(this.getThreadName() + " 正在运行.......");
+            map.put(getThreadName()+"_"+i, String.valueOf(i));
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
@@ -45,7 +46,7 @@ public class CountDownLatchDemo implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Thread runing......");
-        CountDownLatch latch = new CountDownLatch(6);
+        CountDownLatch latch = new CountDownLatch(5);
         for (int i = 0; i < 5; i++) {
             CountDownLatchDemo c = new CountDownLatchDemo(latch, "Thread Name:" + i);
             Thread thread = new Thread(c);
@@ -53,6 +54,9 @@ public class CountDownLatchDemo implements Runnable {
 
         }
         latch.await();
+        for(Map.Entry<String, String> entry : map.entrySet()) {
+            System.out.println("key:"+ entry.getKey() + "--->> value:"+entry.getValue());
+        }
         System.out.println("Thread end....");
     }
 }
