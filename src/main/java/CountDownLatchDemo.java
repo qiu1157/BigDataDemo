@@ -1,6 +1,8 @@
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by qiuxiangu on 2016/11/20.
@@ -46,12 +48,12 @@ public class CountDownLatchDemo implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Thread runing......");
+        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);
         CountDownLatch latch = new CountDownLatch(5);
         for (int i = 0; i < 5; i++) {
             CountDownLatchDemo c = new CountDownLatchDemo(latch, "Thread Name:" + i);
             Thread thread = new Thread(c);
-            thread.start();
-
+            fixedThreadPool.execute(thread);
         }
         latch.await();
         for(Map.Entry<String, String> entry : map.entrySet()) {
