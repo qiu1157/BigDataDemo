@@ -10,5 +10,6 @@ public class ThreadPool {
     public static void main(String[] args) {
         fixedThreadPool.execute(new ThreadDemo("a"));
         fixedThreadPool.execute(new ThreadDemo("b"));
+        fixedThreadPool.shutdown();
     }
 }
